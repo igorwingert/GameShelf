@@ -1,578 +1,38 @@
 # GameShelf
 
-O **GameShelf** é uma aplicação mobile desenvolvida em **React Native com Expo** como parte do **Trabalho Prático 1 – Interface Mobile**, da disciplina de **Desenvolvimento de Aplicações para Dispositivos Móveis**.
+GameShelf é um aplicativo de catálogo de jogos feito com React Native e Expo.
 
-O objetivo do aplicativo é funcionar como uma biblioteca pessoal de jogos, permitindo que o usuário visualize um catálogo, pesquise jogos, acesse detalhes, adicione títulos aos favoritos e personalize seu perfil.
+O projeto foi criado para o Trabalho Prático 1 da disciplina de Desenvolvimento de Aplicações para Dispositivos Móveis.
 
-O projeto foi desenvolvido com foco nos conceitos apresentados em aula, priorizando uma estrutura simples, organizada e adequada para dispositivos móveis.
+O usuário pode ver jogos, pesquisar pelo nome, abrir detalhes, salvar favoritos e editar o perfil.
 
----
+## Funcionalidades
 
-# Sobre o aplicativo
+- Tela inicial
+- Catálogo com oito jogos
+- Pesquisa pelo nome
+- Detalhes dos jogos
+- Lista de favoritos
+- Perfil editável
+- Navegação entre telas
 
-O GameShelf possui as seguintes telas principais:
+Os jogos são locais. O projeto não usa API ou banco de dados.
 
-- **Início**
-- **Jogos**
-- **Detalhes**
-- **Favoritos**
-- **Perfil**
+Os favoritos e os dados do perfil ficam salvos apenas enquanto o aplicativo está aberto. Ao reiniciar o aplicativo, eles voltam ao estado inicial.
 
-O usuário pode navegar entre essas telas, pesquisar jogos pelo nome, consultar informações detalhadas, adicionar ou remover jogos dos favoritos e editar informações do perfil.
-
-Os dados utilizados no catálogo são locais, sem necessidade de API externa ou banco de dados, pois o foco deste trabalho está na construção da interface e na aplicação dos principais conceitos de React Native.
-
----
-
-# Objetivo do trabalho
-
-O objetivo do Trabalho Prático 1 é desenvolver uma aplicação mobile utilizando **React Native com Expo**, aplicando os principais conceitos trabalhados durante as aulas.
-
-O GameShelf foi desenvolvido buscando atender diretamente a todos os requisitos propostos.
-
----
-
-# Requisitos do trabalho:
-
-## React Native com Expo
-
-O projeto foi desenvolvido utilizando **React Native com Expo**.
-
-O Expo foi escolhido por facilitar a criação, execução e teste de aplicações React Native durante o desenvolvimento.
-
-A aplicação pode ser executada utilizando:
-
-```bash
-npx expo start
-
-
-A partir desse comando, o projeto pode ser aberto diretamente no aplicativo **Expo Go** através do QR Code apresentado no terminal.
-
----
-
-## Execução no Expo Go
-
-O projeto foi desenvolvido para funcionar corretamente no **Expo Go**.
-
-Durante o desenvolvimento, a aplicação foi testada em dispositivo móvel utilizando o servidor de desenvolvimento do Expo.
-
-Isso permite testar a aplicação em um celular real sem necessidade de gerar um APK durante a fase de desenvolvimento.
-
----
-
-## Estrutura de projeto organizada
-
-O projeto foi dividido em pastas de acordo com a responsabilidade de cada arquivo.
-
-A principal estrutura utilizada é:
-
-```text
-src/
-├── components/
-├── context/
-├── data/
-├── navigation/
-└── screens/
-```
-
-### `components`
-
-Contém componentes reutilizáveis da interface.
-
-Exemplo:
-
-```text
-GameCard.js
-```
-
-O `GameCard` é utilizado para representar visualmente cada jogo do catálogo.
-
----
-
-### `context`
-
-Contém o gerenciamento de informações compartilhadas entre diferentes telas.
-
-Exemplo:
-
-```text
-FavoritesContext.js
-```
-
-Esse contexto é responsável pelo gerenciamento dos jogos favoritos.
-
----
-
-### `data`
-
-Contém os dados locais utilizados pela aplicação.
-
-Exemplo:
-
-```text
-games.js
-```
-
-Nesse arquivo estão armazenadas as informações dos jogos exibidos no catálogo.
-
----
-
-### `navigation`
-
-Contém a configuração da navegação da aplicação.
-
-Exemplo:
-
-```text
-AppNavigator.js
-```
-
----
-
-### `screens`
-
-Contém as telas principais do aplicativo.
-
-```text
-HomeScreen.js
-GamesScreen.js
-DetailsScreen.js
-FavoritesScreen.js
-ProfileScreen.js
-```
-
-Essa divisão torna o projeto mais organizado e facilita a manutenção e leitura do código.
-
----
-
-# Componentes funcionais
-
-Todas as telas e componentes principais do GameShelf foram desenvolvidos utilizando **componentes funcionais**.
-
-Exemplo simplificado:
-
-```javascript
-function GameCard() {
-  return (
-    <View>
-      <Text>Jogo</Text>
-    </View>
-  );
-}
-```
-
-Os componentes funcionais foram utilizados por serem o padrão atual do React e permitirem a utilização de Hooks como `useState`.
-
-Além disso, a componentização permite dividir a interface em partes menores e reutilizáveis.
-
----
-
-# Props
-
-As **Props** são utilizadas para passar informações de um componente para outro.
-
-No GameShelf, o componente `GameCard` recebe informações sobre o jogo que será exibido.
-
-Exemplo conceitual:
-
-```javascript
-<GameCard
-  game={game}
-  onPress={handlePress}
-/>
-```
-
-O componente recebe:
-
-- dados do jogo;
-- função executada ao pressionar o botão de detalhes.
-
-Isso permite utilizar o mesmo componente para diferentes jogos sem repetir código.
-
----
-
-# State
-
-O **State** é utilizado para armazenar informações que podem mudar durante a execução da aplicação.
-
-O GameShelf utiliza `useState` em diferentes situações.
-
-## Pesquisa de jogos
-
-Na tela de jogos, o estado armazena o texto digitado no campo de pesquisa.
-
-```javascript
-const [search, setSearch] = useState('');
-```
-
-Quando o usuário digita, a lista é filtrada automaticamente.
-
----
-
-## Perfil
-
-O perfil utiliza estados para armazenar informações editáveis do usuário.
-
-O usuário pode alternar entre o modo de visualização e edição e alterar seus dados.
-
----
-
-## Favoritos
-
-Os favoritos também são mantidos através de estado, permitindo que a interface seja atualizada imediatamente quando um jogo é adicionado ou removido.
-
----
-
-# Context API
-
-Além do State local, o projeto utiliza a **Context API do React** para compartilhar a lista de favoritos entre diferentes telas.
-
-Foi criado o arquivo:
-
-```text
-FavoritesContext.js
-```
-
-O contexto disponibiliza funções como:
-
-- adicionar favorito;
-- remover favorito;
-- alternar favorito;
-- verificar se um jogo está favoritado.
-
-A utilização do Context evita a necessidade de passar essas informações manualmente por várias telas através de Props.
-
----
-
-# Componentes básicos do React Native
-
-O trabalho solicita a utilização de componentes básicos do React Native.
-
-O GameShelf utiliza os seguintes componentes:
-
----
-
-## View
-
-O `View` é utilizado como elemento principal de organização da interface.
-
-Ele funciona como um contêiner para outros componentes.
-
-É utilizado em praticamente todas as telas do aplicativo.
-
----
-
-## Text
-
-O `Text` é utilizado para exibir:
-
-- nomes dos jogos;
-- títulos;
-- descrições;
-- gêneros;
-- anos;
-- informações do perfil;
-- informações do projeto.
-
----
-
-## Image
-
-O componente `Image` é utilizado para exibir:
-
-- capas e imagens dos jogos;
-- elementos visuais da aplicação;
-- logo do GameShelf.
-
-As imagens dos jogos estão armazenadas localmente dentro do projeto.
-
----
-
-## Pressable
-
-O `Pressable` é utilizado para criar elementos interativos.
-
-Exemplos:
-
-- botão para abrir detalhes;
-- botão para adicionar aos favoritos;
-- botão para editar perfil;
-- botões da tela inicial.
-
-Foi escolhido porque permite detectar interações de toque do usuário.
-
----
-
-## ScrollView
-
-O `ScrollView` é utilizado em telas que podem possuir conteúdo maior que o espaço disponível.
-
-Por exemplo:
-
-- tela de detalhes;
-- perfil;
-- partes da tela inicial.
-
-Isso permite que o usuário percorra verticalmente o conteúdo quando necessário.
-
----
-
-# StyleSheet
-
-A estilização da aplicação foi realizada utilizando o `StyleSheet` do React Native.
-
-Exemplo:
-
-```javascript
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-});
-```
-
-O `StyleSheet` permite separar a estrutura da interface da definição dos estilos e manter o código mais organizado.
-
----
-
-# Flexbox
-
-O React Native utiliza **Flexbox** como principal sistema de layout.
-
-O GameShelf utiliza propriedades como:
-
-```javascript
-flex
-flexDirection
-justifyContent
-alignItems
-gap
-```
-
-Essas propriedades são utilizadas para organizar:
-
-- textos;
-- imagens;
-- botões;
-- cards;
-- informações dos jogos;
-- elementos das telas.
-
-O uso de Flexbox permite criar layouts flexíveis e adequados a diferentes tamanhos de tela.
-
----
-
-# FlatList
-
-A aplicação utiliza `FlatList` para exibir listas de dados.
-
-Ela é utilizada principalmente em:
-
-- catálogo de jogos;
-- lista de favoritos.
-
-Exemplo conceitual:
-
-```javascript
-<FlatList
-  data={games}
-  renderItem={({ item }) => (
-    <GameCard game={item} />
-  )}
-  keyExtractor={(item) => item.id}
-/>
-```
-
-A `FlatList` foi utilizada porque é o componente indicado pelo React Native para renderização eficiente de listas.
-
-Ela permite renderizar os elementos de forma organizada e reutilizar o componente `GameCard`.
-
----
-
-# Pesquisa de jogos
-
-A tela de jogos possui um campo de pesquisa utilizando `TextInput`.
-
-O texto digitado é armazenado utilizando `useState`.
-
-Os jogos são filtrados através do nome.
-
-Exemplo conceitual:
-
-```javascript
-game.name
-  .toLowerCase()
-  .includes(search.toLowerCase())
-```
-
-Dessa forma, a busca funciona independentemente de letras maiúsculas ou minúsculas.
-
----
-
-# Navegação entre telas
-
-A navegação foi implementada utilizando **React Navigation** com **Native Stack Navigation**.
-
-As principais rotas são:
-
-```text
-Home
-Games
-Details
-Favorites
-Profile
-```
-
-O arquivo responsável pela configuração é:
-
-```text
-src/navigation/AppNavigator.js
-```
-
-A navegação permite que o usuário transite entre as diferentes telas da aplicação.
-
----
-
-# Passagem de parâmetros
-
-Quando um jogo é selecionado na lista, seus dados são enviados para a tela de detalhes.
-
-Exemplo:
-
-```javascript
-navigation.navigate('Details', {
-  game,
-});
-```
-
-Na tela de detalhes, o objeto é recuperado através de:
-
-```javascript
-const { game } = route.params;
-```
-
-Isso permite que a mesma tela de detalhes seja utilizada para qualquer jogo do catálogo.
-
----
-
-# Sistema de favoritos
-
-O usuário pode adicionar e remover jogos dos favoritos através da tela de detalhes.
-
-Os favoritos são compartilhados entre as telas através do `FavoritesContext`.
-
-Na tela de favoritos, os jogos são apresentados utilizando novamente:
-
-- `FlatList`;
-- `GameCard`.
-
-Essa reutilização reduz duplicação de código.
-
-Os favoritos são mantidos apenas durante a execução atual do aplicativo.
-
-Não foi implementada persistência permanente nesta versão porque o foco do Trabalho Prático 1 está na construção da interface e nos conceitos básicos trabalhados em aula.
-
----
-
-# Perfil do usuário
-
-O GameShelf possui uma tela de perfil editável.
-
-O usuário pode visualizar e editar informações como:
-
-- nome;
-- nickname;
-- plataforma principal;
-- gênero de jogo favorito;
-- jogo favorito;
-- bio.
-
-A edição utiliza:
-
-- `useState`;
-- `TextInput`;
-- `Pressable`.
-
-O objetivo dessa funcionalidade é demonstrar uma aplicação prática do gerenciamento de estado em uma interface interativa.
-
----
-
-# 📱 Interface adequada para dispositivos móveis
-
-A interface foi desenvolvida considerando o uso em dispositivos móveis.
-
-Foram utilizados:
-
-- espaçamentos adequados;
-- áreas de toque maiores;
-- organização vertical;
-- imagens responsivas;
-- Flexbox;
-- listas;
-- rolagem;
-- hierarquia visual.
-
-O objetivo foi manter a aplicação simples, organizada e fácil de utilizar em telas pequenas.
-
----
-
-# Jogos disponíveis
-
-O catálogo utiliza dados locais e possui atualmente oito jogos.
-
-Entre eles:
-
-- Red Dead Redemption 2;
-- Dark Souls III;
-- Stardew Valley;
-- Grand Theft Auto V;
-- Baldur's Gate 3;
-- Hogwarts Legacy;
-- Resident Evil 4;
-- Minecraft.
-
-Cada jogo possui informações como:
-
-- nome;
-- gênero;
-- ano;
-- desenvolvedora;
-- plataformas;
-- descrição;
-- imagem.
-
----
-
-# Tecnologias utilizadas
-
-O projeto utiliza principalmente:
+## Tecnologias
 
 - React Native
-- Expo
+- Expo SDK 57
 - JavaScript
 - React Navigation
-- React Context API
+- React Context
 - StyleSheet
 - Flexbox
 
----
+## Como executar
 
-# Como executar
-
-Primeiramente, é necessário possuir o **Node.js** instalado.
-
-Clone o repositório:
-
-```bash
-git clone https://github.com/igorwingert/GameShelf.git
-```
-
-Entre na pasta do projeto:
-
-```bash
-cd GameShelf
-```
+É necessário ter o Node.js e o Expo Go instalados.
 
 Instale as dependências:
 
@@ -580,92 +40,178 @@ Instale as dependências:
 npm install
 ```
 
-Inicie o Expo:
+Inicie o projeto:
 
 ```bash
-npx expo start
+npx expo start --go --clear
 ```
 
-Depois disso, utilize o aplicativo **Expo Go** no celular para escanear o QR Code apresentado no terminal.
+Abra o Expo Go no celular e leia o QR Code mostrado no terminal.
 
-O computador e o celular devem estar conectados à mesma rede para facilitar a comunicação durante o desenvolvimento.
+O computador e o celular devem estar na mesma rede.
 
----
+## Telas
 
-# Estrutura resumida
+O aplicativo possui cinco telas:
+
+- `Home`: tela inicial
+- `Games`: catálogo e pesquisa
+- `Details`: dados do jogo escolhido
+- `Favorites`: jogos salvos
+- `Profile`: dados do usuário
+
+As rotas estão em `src/navigation/AppNavigator.js`.
+
+## Estrutura do projeto
 
 ```text
 GameShelf/
-│
 ├── assets/
-│
 ├── src/
 │   ├── components/
 │   │   └── GameCard.js
-│   │
 │   ├── context/
 │   │   └── FavoritesContext.js
-│   │
 │   ├── data/
 │   │   └── games.js
-│   │
 │   ├── navigation/
 │   │   └── AppNavigator.js
-│   │
 │   └── screens/
 │       ├── HomeScreen.js
 │       ├── GamesScreen.js
 │       ├── DetailsScreen.js
 │       ├── FavoritesScreen.js
 │       └── ProfileScreen.js
-│
 ├── App.js
 ├── index.js
-├── package.json
-└── README.md
+└── package.json
 ```
 
----
+## Conceitos usados
 
-# Relação entre os requisitos e o projeto
+### Componentes funcionais
 
-| Requisito | Implementação no GameShelf |
+Todas as telas e o `GameCard` são componentes funcionais.
+
+### Props
+
+O `GameCard` recebe o jogo e a função do botão por Props. Assim, o mesmo componente pode mostrar jogos diferentes.
+
+### State
+
+O `useState` é usado em três partes:
+
+- texto da pesquisa
+- dados do perfil
+- lista de favoritos
+
+### Context
+
+O `FavoritesContext` compartilha os favoritos entre Details e Favorites.
+
+### Navegação
+
+O projeto usa React Navigation com Stack Navigation.
+
+Quando o usuário escolhe um jogo, o objeto do jogo é enviado para Details:
+
+```javascript
+navigation.navigate('Details', { game });
+```
+
+A tela Details recebe o objeto desta forma:
+
+```javascript
+const { game } = route.params;
+```
+
+### Lista de jogos
+
+Games e Favorites usam `FlatList`. Cada item da lista usa o componente `GameCard`.
+
+### Pesquisa
+
+Games usa `TextInput` e `useState`. A lista mostra apenas os jogos que contêm o texto pesquisado.
+
+### Perfil
+
+O perfil possui dois modos:
+
+- visualização
+- edição
+
+No modo de edição, os dados aparecem em campos `TextInput`. O botão salva os valores no State local.
+
+## Componentes do React Native
+
+| Componente | Uso no projeto |
 |---|---|
-| React Native com Expo | Aplicação criada e executada através do Expo |
-| Expo Go | Testes realizados em dispositivo móvel |
-| Estrutura organizada | Separação em `components`, `context`, `data`, `navigation` e `screens` |
-| Componentes funcionais | Todas as telas e componentes principais |
-| Props | Dados enviados para `GameCard` |
-| State | Pesquisa, perfil e favoritos |
-| View | Organização das interfaces |
-| Text | Exibição das informações |
-| Image | Capas dos jogos e elementos visuais |
-| Pressable | Botões e elementos interativos |
-| ScrollView | Details, Profile e conteúdos maiores |
-| StyleSheet | Estilização das telas |
-| Flexbox | Organização dos layouts |
-| FlatList | Catálogo de jogos e favoritos |
-| React Navigation | Navegação entre as cinco telas |
-| Interface mobile | Layout adaptado para dispositivos móveis |
+| `View` | Organiza os elementos |
+| `Text` | Mostra títulos e informações |
+| `Image` | Mostra a logo e as imagens dos jogos |
+| `Pressable` | Cria os botões |
+| `ScrollView` | Permite rolar Home, Details e Profile |
+| `TextInput` | Pesquisa e edição do perfil |
+| `FlatList` | Mostra jogos e favoritos |
+| `StyleSheet` | Define os estilos |
+| Flexbox | Organiza o layout |
 
----
+## Jogos do catálogo
 
-# Conclusão
+- Red Dead Redemption 2
+- Dark Souls III
+- Stardew Valley
+- Grand Theft Auto V
+- Baldur's Gate 3
+- Hogwarts Legacy
+- Resident Evil 4
+- Minecraft
 
-O desenvolvimento do GameShelf permitiu aplicar na prática os principais conceitos abordados durante as aulas de Desenvolvimento de Aplicações para Dispositivos Móveis.
+Cada jogo possui:
 
-Durante o projeto foram utilizados conceitos como:
+- nome
+- gênero
+- ano
+- desenvolvedora
+- plataformas
+- descrição
+- imagem
 
-- componentização;
-- Props;
-- State;
-- Hooks;
-- Context API;
-- navegação;
-- listas;
-- estilização;
-- Flexbox;
-- organização de projeto.
+## Requisitos atendidos
 
-O resultado é uma aplicação mobile simples e funcional, capaz de demonstrar os conceitos fundamentais de desenvolvimento com React Native e Expo solicitados no Trabalho Prático 1.
+| Requisito | Situação |
+|---|---|
+| React Native com Expo | Atendido |
+| Expo Go | Atendido |
+| Componentes funcionais | Atendido |
+| Props | Atendido |
+| State e useState | Atendido |
+| React Context | Atendido |
+| View, Text e Image | Atendido |
+| Pressable e TextInput | Atendido |
+| ScrollView | Atendido |
+| StyleSheet e Flexbox | Atendido |
+| FlatList | Atendido |
+| React Navigation | Atendido |
+| Estrutura organizada | Atendido |
+
+## Como testar
+
+1. Abra o aplicativo.
+2. Toque em **Pesquisar jogos**.
+3. Pesquise um jogo e depois limpe o campo.
+4. Toque em **Ver detalhes**.
+5. Adicione o jogo aos favoritos.
+6. Volte para Home e abra **Favoritos**.
+7. Confirme que o jogo aparece na lista.
+8. Abra **Perfil**.
+9. Toque em **Editar perfil**, altere um campo e salve.
+
+## Verificação do projeto
+
+```bash
+npx expo lint
+npx tsc --noEmit
+npx expo install --check
+npx expo export --platform all
 ```
