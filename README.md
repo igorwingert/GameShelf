@@ -1,4 +1,3 @@
-```markdown
 # GameShelf
 
 O **GameShelf** é uma aplicação mobile desenvolvida em **React Native com Expo** como parte do **Trabalho Prático 1 – Interface Mobile**, da disciplina de **Desenvolvimento de Aplicações para Dispositivos Móveis**.
@@ -45,7 +44,7 @@ A aplicação pode ser executada utilizando:
 
 ```bash
 npx expo start
-```
+
 
 A partir desse comando, o projeto pode ser aberto diretamente no aplicativo **Expo Go** através do QR Code apresentado no terminal.
 
@@ -670,7 +669,3 @@ Durante o projeto foram utilizados conceitos como:
 
 O resultado é uma aplicação mobile simples e funcional, capaz de demonstrar os conceitos fundamentais de desenvolvimento com React Native e Expo solicitados no Trabalho Prático 1.
 ```
-
-Eu gostei bastante dessa abordagem para o seu caso porque o README deixa de ser só “como instalar” e vira também uma **evidência de atendimento ao enunciado**.
-
-Uma coisa que eu mudaria depois, quando o Codex terminar a repaginação, é só atualizar os trechos que descrevem o visual caso ele mude bastante. O conteúdo técnico principal continuará válido.
