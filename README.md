@@ -550,7 +550,7 @@ No TP2 o GameShelf deixou de ser só uma vitrine com dados em memória e passou 
 
 | Técnica exigida | Onde está no GameShelf | Arquivos principais |
 |---|---|---|
-| Consumo de API com Axios e JSON | Seção **Preços no PC** na tela de detalhes (API da CheapShark) | `src/services/api.js`, `src/components/PriceSection.js` |
+| Consumo de API com Axios e JSON | Seções **Preços no PC** (API da CheapShark) e **O que a comunidade diz** (API da Steam) na tela de detalhes | `src/services/api.js`, `src/components/PriceSection.js`, `src/components/CommunityReviewsSection.js` |
 | Persistência com AsyncStorage | Perfil (incluindo a foto) e favoritos continuam salvos ao fechar o app | `src/storage/storage.js`, `src/context/FavoritesContext.js`, `src/screens/ProfileScreen.js` |
 | Persistência com SQLite | Avaliações dos jogos e diário de capturas | `src/database/database.js`, `src/components/ReviewSection.js` |
 | Câmera e manipulação de imagens | Capturas de gameplay por jogo e foto de perfil | `src/services/imageService.js`, `src/screens/AddCaptureScreen.js` |
@@ -566,6 +566,10 @@ A tela de detalhes mostra o **menor preço atual** do jogo em lojas de PC (Steam
 - Tocar em uma oferta abre a página da loja com `Linking.openURL`.
 
 API utilizada: [CheapShark](https://apidocs.cheapshark.com/) — gratuita e sem necessidade de chave. Os valores são em dólar.
+
+### Avaliações da comunidade (Steam)
+
+A tela de detalhes também mostra **o que a comunidade diz** sobre o jogo, usando um segundo cliente Axios para a API pública da Steam (`IUserReviewsService/GetAppReviews`, sem chave): a classificação geral traduzida (ex.: "Extremamente positivas"), a porcentagem de recomendações com uma barra e as três avaliações mais úteis, com indicação de recomenda/não recomenda e horas jogadas. Tocar em uma avaliação expande o texto completo. A API retorna as avaliações em inglês.
 
 ## Persistência com AsyncStorage
 

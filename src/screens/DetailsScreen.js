@@ -2,6 +2,7 @@ import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'rea
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CapturesSection from '../components/CapturesSection';
+import CommunityReviewsSection from '../components/CommunityReviewsSection';
 import PriceSection from '../components/PriceSection';
 import ReviewSection from '../components/ReviewSection';
 import { useFavorites } from '../context/FavoritesContext';
@@ -99,6 +100,8 @@ export default function DetailsScreen({ route, navigation }) {
         <PriceSection game={game} />
 
         <ReviewSection gameId={game.id} onSaved={handleReviewSaved} />
+
+        <CommunityReviewsSection game={game} />
 
         <CapturesSection game={game} navigation={navigation} />
       </View>

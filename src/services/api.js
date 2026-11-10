@@ -89,3 +89,61 @@ export async function getGamePrices(steamAppId) {
       : null,
   };
 }
+
+// ---------- Avaliações da comunidade (Steam) ----------
+
+// Segundo cliente Axios: API pública da Steam (não precisa de chave).
+// eslint-disable-next-line import/no-named-as-default-member
+const steamApi = axios.create({
+  baseURL: 'https://api.steampowered.com',
+  timeout: 10000,
+  headers: { Accept: 'application/json' },
+});
+
+const STEAM_SCORE_LABELS = {
+  'Overwhelmingly Positive': 'Extremamente positivas',
+  'Very Positive': 'Muito positivas',
+  Positive: 'Positivas',
+  'Mostly Positive': 'Ligeiramente positivas',
+  Mixed: 'Neutras',
+  'Mostly Negative': 'Ligeiramente negativas',
+  Negative: 'Negativas',
+  'Very Negative': 'Muito negativas',
+  'Overwhelmingly Negative': 'Extremamente negativas',
+};
+
+/**
+ * Busca o resumo e as avaliações mais úteis de um jogo na Steam.
+ * Retorna null se o jogo não tiver avaliações.
+ * @param {string} steamAppId
+ */
+export async function getSteamReviews(steamAppId) {
+  const response = await steamApi.get('/IUserReviewsService/GetAppReviews/v1/', {
+    params: { appid: steamAppId, num_per_page: 20 },
+  });
+
+  const { query_summary: summary, reviews = [] } = response.data.response ?? {};
+
+  if (!summary || !summary.total_reviews) {
+    return null;
+  }
+
+  const total = summary.total_positive + summary.total_negative;
+
+  return {
+    label: STEAM_SCORE_LABELS[summary.review_score_desc] ?? summary.review_score_desc,
+    total,
+    positivePercent: total > 0 ? Math.round((summary.total_positive / total) * 100) : 0,
+    // Pega as 3 primeiras avaliações com texto de verdade (a API já ordena pelas mais úteis).
+    reviews: reviews
+      .filter((review) => review.review && review.review.trim().length > 40)
+      .slice(0, 3)
+      .map((review) => ({
+        id: review.recommendationid,
+        recommended: review.voted_up,
+        text: review.review.trim(),
+        hours: Math.round((review.author?.playtime_at_review ?? 0) / 60),
+        helpfulVotes: review.votes_up,
+      })),
+  };
+}
