@@ -24,6 +24,8 @@ export default function AddCaptureScreen({ route, navigation }) {
   const [rotation, setRotation] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [preview, setPreview] = useState(null);
+  // Última imagem já carregada na tela: fica visível enquanto a nova versão carrega (evita piscar).
+  const [shownUri, setShownUri] = useState(null);
   const [isProcessing, setIsProcessing] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [caption, setCaption] = useState(defaultCaption);
@@ -100,8 +102,17 @@ export default function AddCaptureScreen({ route, navigation }) {
         {game && <Text style={styles.gameName}>{game.name}</Text>}
 
         <View style={[styles.previewBox, { aspectRatio }]}>
-          {preview && <Image source={{ uri: preview.uri }} style={styles.preview} />}
-          {isProcessing && (
+          {shownUri && <Image source={{ uri: shownUri }} style={styles.preview} fadeDuration={0} />}
+          {preview && (
+            <Image
+              key={preview.uri}
+              source={{ uri: preview.uri }}
+              style={[styles.preview, styles.previewTop]}
+              fadeDuration={0}
+              onLoad={() => setShownUri(preview.uri)}
+            />
+          )}
+          {(isProcessing || (preview && preview.uri !== shownUri)) && (
             <View style={styles.processing}>
               <ActivityIndicator color="#A78BFA" size="large" />
             </View>
@@ -195,6 +206,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D2330',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  previewTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
   preview: {
     width: '100%',
