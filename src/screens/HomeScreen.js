@@ -60,6 +60,17 @@ export default function HomeScreen({ navigation }) {
 
           <Pressable
             accessibilityRole="button"
+            onPress={() => navigation.navigate('Captures')}
+            style={({ pressed }) => [styles.shortcut, pressed && styles.pressed]}>
+            <View style={styles.shortcutText}>
+              <Text style={styles.shortcutTitle}>Minhas capturas</Text>
+              <Text style={styles.subtitle}>Fotos das suas jogatinas</Text>
+            </View>
+            <Text style={styles.chevron}>›</Text>
+          </Pressable>
+
+          <Pressable
+            accessibilityRole="button"
             onPress={() => navigation.navigate('Profile')}
             style={({ pressed }) => [styles.shortcut, pressed && styles.pressed]}>
             <View style={styles.shortcutText}>

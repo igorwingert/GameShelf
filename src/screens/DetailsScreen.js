@@ -1,13 +1,30 @@
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import CapturesSection from '../components/CapturesSection';
+import PriceSection from '../components/PriceSection';
+import ReviewSection from '../components/ReviewSection';
 import { useFavorites } from '../context/FavoritesContext';
+import { startCaptureFlow } from '../services/captureFlow';
 
-export default function DetailsScreen({ route }) {
+export default function DetailsScreen({ route, navigation }) {
   const { game } = route.params;
   const { isFavorite, toggleFavorite } = useFavorites();
   const isGameFavorite = isFavorite(game.id);
   const insets = useSafeAreaInsets();
+
+  // "Prova de zerada": ao marcar o jogo como Zerado, sugere registrar uma captura.
+  function handleReviewSaved({ status, previousStatus }) {
+    if (status === 'zerado' && previousStatus !== 'zerado') {
+      Alert.alert('Parabéns, você zerou! 🏆', 'Quer registrar uma captura como prova?', [
+        { text: 'Agora não', style: 'cancel' },
+        {
+          text: 'Registrar',
+          onPress: () => startCaptureFlow(navigation, game, `Zerei ${game.name}! 🏆`),
+        },
+      ]);
+    }
+  }
 
   return (
     <ScrollView
@@ -78,6 +95,12 @@ export default function DetailsScreen({ route }) {
             {isGameFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
           </Text>
         </Pressable>
+
+        <PriceSection game={game} />
+
+        <ReviewSection gameId={game.id} onSaved={handleReviewSaved} />
+
+        <CapturesSection game={game} navigation={navigation} />
       </View>
     </ScrollView>
   );

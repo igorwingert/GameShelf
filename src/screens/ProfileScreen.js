@@ -1,6 +1,24 @@
-import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import {
+  askImageSource,
+  deleteImageFile,
+  pickImage,
+  processImage,
+  saveImageToAppFolder,
+} from '../services/imageService';
+import { STORAGE_KEYS, loadData, saveData } from '../storage/storage';
 
 const initialProfile = {
   name: 'Jogador',
@@ -9,6 +27,7 @@ const initialProfile = {
   favoriteGenre: 'RPG',
   favoriteGame: 'Ainda não definido',
   bio: 'Apaixonado por jogos e novas aventuras.',
+  photoUri: null,
 };
 
 const profileFields = [
@@ -36,11 +55,51 @@ export default function ProfileScreen() {
   const [profile, setProfile] = useState(initialProfile);
   const [draftProfile, setDraftProfile] = useState(initialProfile);
   const [isEditing, setIsEditing] = useState(false);
+  const [isSavingPhoto, setIsSavingPhoto] = useState(false);
   const insets = useSafeAreaInsets();
   const displayedProfile = isEditing ? draftProfile : profile;
   const displayedFields = isEditing
     ? profileFields
     : profileFields.filter((field) => field.key !== 'name' && field.key !== 'nickname');
+
+  // Ao abrir a tela, carrega o perfil salvo no AsyncStorage.
+  useEffect(() => {
+    loadData(STORAGE_KEYS.profile, initialProfile).then((savedProfile) => {
+      const loadedProfile = { ...initialProfile, ...savedProfile };
+      setProfile(loadedProfile);
+      setDraftProfile(loadedProfile);
+    });
+  }, []);
+
+  function persistProfile(newProfile) {
+    setProfile(newProfile);
+    saveData(STORAGE_KEYS.profile, newProfile);
+  }
+
+  function updatePhoto(photoUri) {
+    deleteImageFile(profile.photoUri);
+    persistProfile({ ...profile, photoUri });
+    setDraftProfile((currentDraft) => ({ ...currentDraft, photoUri }));
+  }
+
+  function handleChangePhoto() {
+    askImageSource(async (source) => {
+      const picked = await pickImage(source, { allowsEditing: true, aspect: [1, 1] });
+      if (!picked) {
+        return;
+      }
+
+      setIsSavingPhoto(true);
+      try {
+        // Reduz a foto para 512px e salva uma cópia permanente na pasta do app.
+        const processed = await processImage(picked, { maxWidth: 512 });
+        const savedUri = await saveImageToAppFolder(processed.uri, 'perfil');
+        updatePhoto(savedUri);
+      } finally {
+        setIsSavingPhoto(false);
+      }
+    });
+  }
 
   function updateDraft(field, value) {
     setDraftProfile((currentDraft) => ({ ...currentDraft, [field]: value }));
@@ -48,7 +107,7 @@ export default function ProfileScreen() {
 
   function handleProfileAction() {
     if (isEditing) {
-      setProfile(draftProfile);
+      persistProfile(draftProfile);
       setIsEditing(false);
       return;
     }
@@ -71,11 +130,44 @@ export default function ProfileScreen() {
       ]}>
       <View style={styles.content}>
         <View style={[styles.card, styles.identityCard]}>
-          <View style={styles.avatar}>
-            <Text style={styles.initials}>{getInitials(displayedProfile.name)}</Text>
-          </View>
+          {profile.photoUri ? (
+            <Image
+              source={{ uri: profile.photoUri }}
+              style={styles.avatarPhoto}
+              accessibilityLabel="Foto de perfil"
+            />
+          ) : (
+            <View style={styles.avatar}>
+              <Text style={styles.initials}>{getInitials(displayedProfile.name)}</Text>
+            </View>
+          )}
           <Text style={styles.name}>{displayedProfile.name || 'Jogador'}</Text>
           <Text style={styles.nickname}>{displayedProfile.nickname || '@player'}</Text>
+
+          <View style={styles.photoActions}>
+            {isSavingPhoto ? (
+              <ActivityIndicator color="#A78BFA" />
+            ) : (
+              <>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={handleChangePhoto}
+                  style={({ pressed }) => [styles.photoButton, pressed && styles.actionButtonPressed]}>
+                  <Text style={styles.photoButtonText}>
+                    {profile.photoUri ? 'Trocar foto' : 'Adicionar foto'}
+                  </Text>
+                </Pressable>
+                {profile.photoUri && (
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => updatePhoto(null)}
+                    style={({ pressed }) => [styles.photoButton, pressed && styles.actionButtonPressed]}>
+                    <Text style={styles.photoRemoveText}>Remover</Text>
+                  </Pressable>
+                )}
+              </>
+            )}
+          </View>
         </View>
 
         <View style={styles.card}>
@@ -162,6 +254,37 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D2330',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  avatarPhoto: {
+    width: 96,
+    height: 96,
+    marginBottom: 4,
+    borderRadius: 48,
+    backgroundColor: '#1D2330',
+  },
+  photoActions: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 8,
+    minHeight: 36,
+    alignItems: 'center',
+  },
+  photoButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#303640',
+  },
+  photoButtonText: {
+    color: '#BFAAFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  photoRemoveText: {
+    color: '#F28B82',
+    fontSize: 14,
+    fontWeight: '600',
   },
   initials: {
     color: '#9C7CF7',

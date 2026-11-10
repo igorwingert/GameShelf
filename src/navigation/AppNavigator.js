@@ -1,6 +1,9 @@
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import AddCaptureScreen from '../screens/AddCaptureScreen';
+import CaptureViewerScreen from '../screens/CaptureViewerScreen';
+import CapturesScreen from '../screens/CapturesScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import GamesScreen from '../screens/GamesScreen';
@@ -40,6 +43,17 @@ export default function AppNavigator() {
         <Stack.Screen name="Details" component={DetailsScreen} options={{ title: 'Detalhes' }} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} options={{ title: 'Favoritos' }} />
         <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil' }} />
+        <Stack.Screen name="Captures" component={CapturesScreen} options={{ title: 'Capturas' }} />
+        <Stack.Screen
+          name="AddCapture"
+          component={AddCaptureScreen}
+          options={{ title: 'Nova captura' }}
+        />
+        <Stack.Screen
+          name="CaptureViewer"
+          component={CaptureViewerScreen}
+          options={{ title: 'Captura' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

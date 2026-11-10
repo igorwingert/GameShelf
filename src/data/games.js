@@ -7,6 +7,7 @@
  * @property {string} developer
  * @property {string[]} platforms
  * @property {string} description
+ * @property {string | null} steamAppId Usado para buscar preços na API da CheapShark
  * @property {import('react-native').ImageSourcePropType} image
  */
 
@@ -17,6 +18,7 @@
 const games = [
   {
     id: 'red-dead-redemption-2',
+    steamAppId: '1174180',
     name: 'Red Dead Redemption 2',
     genre: 'Ação e aventura',
     year: 2018,
@@ -28,6 +30,7 @@ const games = [
   },
   {
     id: 'dark-souls-iii',
+    steamAppId: '374320',
     name: 'Dark Souls III',
     genre: 'RPG de ação',
     year: 2016,
@@ -39,6 +42,7 @@ const games = [
   },
   {
     id: 'stardew-valley',
+    steamAppId: '413150',
     name: 'Stardew Valley',
     genre: 'Simulação e RPG',
     year: 2016,
@@ -50,6 +54,7 @@ const games = [
   },
   {
     id: 'grand-theft-auto-v',
+    steamAppId: '271590',
     name: 'Grand Theft Auto V',
     genre: 'Ação e aventura',
     year: 2013,
@@ -69,6 +74,7 @@ const games = [
   },
   {
     id: 'baldurs-gate-3',
+    steamAppId: '1086940',
     name: "Baldur's Gate 3",
     genre: 'RPG',
     year: 2023,
@@ -80,6 +86,7 @@ const games = [
   },
   {
     id: 'hogwarts-legacy',
+    steamAppId: '990080',
     name: 'Hogwarts Legacy',
     genre: 'RPG de ação',
     year: 2023,
@@ -91,6 +98,7 @@ const games = [
   },
   {
     id: 'resident-evil-4',
+    steamAppId: '2050650',
     name: 'Resident Evil 4',
     genre: 'Terror e sobrevivência',
     year: 2023,
@@ -102,6 +110,7 @@ const games = [
   },
   {
     id: 'minecraft',
+    steamAppId: null, // não é vendido em lojas de PC parceiras
     name: 'Minecraft',
     genre: 'Sandbox e sobrevivência',
     year: 2011,
